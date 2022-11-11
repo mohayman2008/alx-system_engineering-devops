@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# This script is displaying "Best School" 10 times
+
+fn="school"
+
+if [ -e "$fn" ]
+   then
+   echo 'school file exists'
+else
+    echo 'school file does not exist'
+    exit 0
+fi
+
+if [ -s "$fn" ]
+   then
+   echo 'school file is not empty'
+else
+    echo 'school file is empty'
+fi
+
+if [ -f "$fn" ]
+then
+    echo 'school is a regular file'
+fi
