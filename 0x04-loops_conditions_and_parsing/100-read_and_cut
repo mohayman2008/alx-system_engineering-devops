@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This script is displaying "Best School" 10 times
+
+fn='/etc/passwd'
+
+while read -r line
+do
+    echo "$line" | cut -d ':' -f 1,3,6
+done < "$fn"
+
+exit 0
