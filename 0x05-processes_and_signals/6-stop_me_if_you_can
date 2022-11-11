@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This script stops all "4-to_infinity_and_beyond" processes
+
+while :
+do
+    [ "$(pkill -f "4-to_infinity_and_beyond")" ] || break
+done
