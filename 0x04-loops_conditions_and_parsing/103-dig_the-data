@@ -3,4 +3,4 @@
 
 filename='apache-access.log'
 
-awk 'BEGIN { SUBSEP = OFS = FS } { a[$1,$9]++} END { for (i in a) { print a[i], i }}' "$filename" | sort -rnk1
+awk 'BEGIN { SUBSEP = OFS = FS } { a[$1,$9]++} END { for (i in a) { print "   ", a[i], i }}' "$filename" | sort -rnk1
