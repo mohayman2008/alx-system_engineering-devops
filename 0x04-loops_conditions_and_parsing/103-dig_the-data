@@ -4,4 +4,4 @@
 filename='apache-access.log'
 
 # awk 'BEGIN { SUBSEP = OFS = FS } { a[$1,$9]++} END { for (i in a) { print "   ", a[i], i }}' "$filename" | sort -rnsk1
-awk '{ print $1 " " $9}' apache-access.log | sort | uniq -c | sort -rn
+awk '{ print $1 " " $9}' "$filename" | sort | uniq -c | sort -rn
