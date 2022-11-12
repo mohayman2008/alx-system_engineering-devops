@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Groups visitors by IP and HTTP status code from Apache log file and display this data
+
+filename='apache-access.log'
+
+awk 'BEGIN { SUBSEP = OFS = FS } { a[$1,$9]++} END { for (i in a) { print a[i], i }}' "$filename" | sort -rnk1
