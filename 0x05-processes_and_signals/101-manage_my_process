@@ -18,8 +18,8 @@ case $1 in
 		    [ "$(kill "$pid")" ]
 		done
 		rm "$pid_file"
-		echo 'manage_my_process stopped'
 	 fi
+	 echo 'manage_my_process stopped'
 	 ;;
      "restart")
 	 "$0" stop > /dev/null
