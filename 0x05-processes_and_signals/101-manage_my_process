@@ -10,16 +10,16 @@ case $1 in
 	 echo 'manage_my_process started'
 	 ;;
      "stop")
-	 if [ -e "$pid_file" ]
-	    then
-		pids=$(cat "$pid_file")
-		for pid in $pids
-		do
-		    [ "$(kill "$pid")" ]
-		done
-		rm "$pid_file"
-	 fi
+	 #if [ -e "$pid_file" ]
+	 #   then
+	 pids=$(cat "$pid_file")
+	 for pid in $pids
+	 do
+	     [ "$(kill "$pid")" ]
+	 done
+	 rm "$pid_file"
 	 echo 'manage_my_process stopped'
+	 #fi
 	 ;;
      "restart")
 	 "$0" stop > /dev/null
