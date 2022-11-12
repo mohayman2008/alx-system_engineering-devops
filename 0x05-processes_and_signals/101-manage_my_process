@@ -6,20 +6,26 @@ pid_file='/var/run/my_process.pid'
 case $1 in
      "start")
 	 ./manage_my_process &
-	 echo "$!" >> "$pid_file"
+
+	 # echo "$!" >> "$pid_file"
+
+	 echo "$!" > "$pid_file"
 	 echo 'manage_my_process started'
 	 ;;
      "stop")
-	 #if [ -e "$pid_file" ]
+	 # if [ -e "$pid_file" ]
 	 #   then
-	 pids=$(cat "$pid_file")
-	 for pid in $pids
-	 do
-	     [ "$(kill "$pid")" ]
-	 done
+	 # pids=$(cat "$pid_file")
+	 # for pid in $pids
+	 # do
+	 #     [ "$(kill "$pid")" ]
+	 # done
+
+	 kill "$(cat $pid_file)"
 	 rm "$pid_file"
 	 echo 'manage_my_process stopped'
-	 #fi
+
+	 # fi
 	 ;;
      "restart")
 	 "$0" stop > /dev/null
