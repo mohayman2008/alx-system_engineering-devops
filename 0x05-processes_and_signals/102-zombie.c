@@ -21,11 +21,9 @@ int infinite_while(void)
 /**
  * main - create zombie processes
  *
- * @ac: number of arguments
- * @av: arguments vector
  * Return: Always (0)
  */
-int main(int ac, char **av)
+int main(void)
 {
 	pid_t pid, parent;
 	int i = 0;
