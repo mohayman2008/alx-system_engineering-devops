@@ -2,5 +2,6 @@
 
 exec { 'killmenow':
   path    => $path,
-  command => "pkill -f killmenow"
+  command => 'pkill -f killmenow',
+  returns => [0, 1]
 }
