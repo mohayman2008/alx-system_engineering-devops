@@ -1,4 +1,4 @@
-# This manifest creates a file 'school' in the directory '/tmp'.
+# This manifest creates a file 'school' in the directory '/tmp'
 
 file { 'create a file':
   ensure  => present,
