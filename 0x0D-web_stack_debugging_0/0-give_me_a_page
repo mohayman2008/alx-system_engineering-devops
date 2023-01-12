@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fix Apache server issues in the "holbertonschool/265-0" docker image
+
+service apache2 start
