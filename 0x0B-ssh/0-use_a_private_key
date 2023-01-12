@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Connects to remote server through ssh using the private key "~/.ssh/school"
+#   with the user "ubuntu"
+
+remote='54.90.15.29'
+user='ubuntu'
+identity_file=~'/.ssh/school'
+
+ssh "$user"@"$remote" -i "$identity_file"
