@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Installs and configure Nginx web server
+
+apt-get update
+apt-get install -y nginx
+ufw allow 'Nginx FULL'
+echo "Hello World!" > /var/www/html/index.html
+service nginx restart
