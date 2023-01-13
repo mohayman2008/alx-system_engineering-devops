@@ -19,5 +19,7 @@ apt-get -y install nginx
 ufw allow 'Nginx FULL'
 echo 'Hello World!' > /var/www/html/index.html
 echo 'Ceci n'\''est pas une page' > /var/www/html/404
-sed -i "s/^\s*location\s*\/\s*{\s*$/$config/" /etc/nginx/sites-enabled/default
+if [ $(grep -e "^\\s*location\\s*/404\\s*" /etc/nginx/sites-enabled/default | wc -l) -eq 0 ]; then
+	sed -i "s/^\s*location\s*\/\s*{\s*$/$config/" /etc/nginx/sites-enabled/default
+fi
 service nginx restart
