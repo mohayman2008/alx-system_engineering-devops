@@ -3,6 +3,6 @@
 
 apt-get update
 apt-get -y install nginx
-# ufw allow 'Nginx FULL'
+ufw allow 'Nginx FULL'
 echo 'Hello World!' > /var/www/html/index.html
-service nginx start
+service nginx restart
