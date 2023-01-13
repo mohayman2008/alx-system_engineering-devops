@@ -3,7 +3,7 @@
 # shellcheck disable=SC2016
 # shellcheck disable=SC1004
 
-redirect='    location \/redirect_me {\
+config='    location \/redirect_me {\
 		return 301 https:\/\/www.google.com\/;\
 	}\
 \
@@ -11,6 +11,7 @@ redirect='    location \/redirect_me {\
 	location  \/404 {\
             internal;\
 	}\
+\
 	location \/ {'
 
 apt-get update
@@ -18,5 +19,5 @@ apt-get -y install nginx
 ufw allow 'Nginx FULL'
 echo 'Hello World!' > /var/www/html/index.html
 echo 'Ceci n'\''est pas une page' > /var/www/html/404
-sed -i "s/^\s*location\s*\/\s*{\s*$/$redirect/" /etc/nginx/sites-enabled/default
+sed -i "s/^\s*location\s*\/\s*{\s*$/$config/" /etc/nginx/sites-enabled/default
 service nginx restart
