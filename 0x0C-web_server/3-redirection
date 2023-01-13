@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Installs and configure Nginx web server
 # shellcheck disable=SC2016
-# shellcheck disable=SC1004
 
 contents='server {
 	listen 80 default_server;
@@ -17,7 +16,7 @@ contents='server {
 	}
 
 	location /redirect_me {
-		return 301 https://www.google.com/;
+		rewrite ^ https://www.google.com/search?q=301+redirect permanent;
 	}
 }
 '
