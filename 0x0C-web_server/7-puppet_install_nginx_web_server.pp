@@ -43,9 +43,9 @@ file { '/var/www/html/404':
 file { 'Nginx default config file':
   ensure  => file,
   path    => '/etc/nginx/sites-enabled/default',
-  notify  => Service['nginx']
+  notify  => Service['nginx'],
   content =>
-"server {
+'server {
         listen 80 default_server;
         listen [::]:80 default_server;
                root /var/www/html;
@@ -55,7 +55,7 @@ file { 'Nginx default config file':
         location / {
                 # First attempt to serve request as file, then
                 # as directory, then fall back to displaying a 404.
-                try_files \$uri \$uri/ =404;
+                try_files $uri $uri/ =404;
         }
         error_page 404 /404;
         location  /404 {
@@ -66,7 +66,7 @@ file { 'Nginx default config file':
             return 301 https://www.google.com/;
         }
 }
-"
+'
 }
 
 # Restart nginx
