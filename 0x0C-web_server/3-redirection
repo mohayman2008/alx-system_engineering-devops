@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Installs and configure Nginx web server
 # shellcheck disable=SC2016
+# shellcheck disable=SC1004
 
 rule='	location \/redirect_me {\
 		return 301 https:\/\/www.google.com\/;\
