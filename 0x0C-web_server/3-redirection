@@ -21,7 +21,7 @@ apt-get update
 apt-get -y install nginx
 ufw allow 'Nginx FULL'
 echo 'Hello World!' > /var/www/html/index.html
-if [ $(grep -e "^\\s*location\\s*/redirect_me\\s*" /etc/nginx/sites-enabled/default | wc -l) -eq 0 ]; then
+if [ "$(grep -c -e "^\\s*location\\s*/redirect_me\\s*" /etc/nginx/sites-enabled/default)" -eq 0 ]; then
 	echo ""
 	sed -i "s/^\s*location\s*\/\s*{\s*$/$redirect/" /etc/nginx/sites-enabled/default
 fi
