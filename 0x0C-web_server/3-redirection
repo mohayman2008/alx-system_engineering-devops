@@ -2,28 +2,28 @@
 # Installs and configure Nginx web server
 # shellcheck disable=SC2016
 
-contents='server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-		root /var/www/html;
-	# Add index.php to the list if you are using PHP
-	index index.html index.htm index.nginx-debian.html;
-	server_name _;
-	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
-		try_files $uri $uri/ =404;
-	}
+rule='	location \/redirect_me {\
+		return 301 https:\/\/www.google.com\/;\
+	}'
 
-	if (\$request_filename ~ redirect_me) {
-		rewrite ^ https://www.google.com/ permanent;
-	}
-}
-'
+create_rule='	location \/ {\
+		try_files $uri $uri\/ =404;\
+	}\
+\
+	location \/redirect_me {\
+		return 301 https:\/\/www.google.com\/;\
+	}'
 
 apt-get update
 apt-get -y install nginx
 ufw allow 'Nginx FULL'
 echo 'Hello World!' > /var/www/html/index.html
-echo "$contents" > /etc/nginx/sites-enabled/default
+
+rule_exists="$(grep -c -e "^\\s*location\\s*/redirect_me\\s*{" /etc/nginx/sites-enabled/default)"
+if [ "$rule_exists" -eq 0 ]; then
+	sed -z -E "s/\s*location\s*\/\s*\{(\s|[^}])*\}/\n\n$create_rule/" /etc/nginx/sites-enabled/default
+else
+	sed -z -E "s/\s*location\s*\/redirect_me\s*\{(\s|[^}])*\}/\n\n$rule/" /etc/nginx/sites-enabled/default
+fi
+
 service nginx restart
