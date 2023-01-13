@@ -3,6 +3,26 @@
 # shellcheck disable=SC2016
 # shellcheck disable=SC1004
 
+config='server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+		root /var/www/html;
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm index.nginx-debian.html;
+	server_name _;
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ =404;
+	}
+
+	location /redirect_me {
+		return 301 https://www.google.com/;
+	}
+}
+'
+
 rule='	location \/redirect_me {\
 		return 301 https:\/\/www.google.com\/;\
 	}'
@@ -21,7 +41,9 @@ ufw allow 'Nginx FULL'
 echo 'Hello World!' > /var/www/html/index.html
 
 rule_exists="$(grep -c -e "^\\s*location\\s*/redirect_me\\s*{" /etc/nginx/sites-enabled/default)"
-if [ "$rule_exists" -eq 0 ]; then
+if [ "$(grep -c -e "^\\s*location\\s*/\\s*{" /etc/nginx/sites-enabled/default)" -eq 0 ]; then
+	echo "$config" > /etc/nginx/sites-enabled/default
+elif [ "$rule_exists" -eq 0 ]; then
 	sed -z -E "s/\s*location\s*\/\s*\{(\s|[^}])*\}/\n\n$create_rule/" /etc/nginx/sites-enabled/default
 else
 	sed -z -E "s/\s*location\s*\/redirect_me\s*\{(\s|[^}])*\}/\n\n$rule/" /etc/nginx/sites-enabled/default
