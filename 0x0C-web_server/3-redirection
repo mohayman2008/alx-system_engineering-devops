@@ -1,30 +1,56 @@
 #!/usr/bin/env bash
-# Installs, configures, and starts the server
-apt-get update
-apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
-mkdir -p /var/www/html/
-sudo chmod -R 755 /var/www
-echo 'Hello World!' > /var/www/html/index.html
-SERVER_CONFIG=\
-"server {
+# Installs and configure Nginx web server
+# shellcheck disable=SC2016
+# shellcheck disable=SC1004
+
+config='server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
-	root /var/www/html;
+		root /var/www/html;
+	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html;
 	server_name _;
+
 	location / {
-		try_files \$uri \$uri/ =404;
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ =404;
 	}
-	if (\$request_filename ~ redirect_me){
-		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
+
+	location /redirect_me {
+		return 301 https://www.google.com/;
 	}
-}"
+}
+'
 
-bash -c "echo -e '$SERVER_CONFIG' > /etc/nginx/sites-enabled/default"
+rule='	location \/redirect_me {\
+		return 301 https:\/\/www.google.com\/;\
+	}'
 
-if [ "$(pgrep -c nginx)" -le 0 ]; then
-	service nginx start
+create_rule='	location \/ {\
+		try_files $uri $uri\/ =404;\
+	}\
+\
+	location \/redirect_me {\
+		return 301 https:\/\/www.google.com\/;\
+	}'
+
+apt-get update
+apt-get -y install nginx
+
+ufw allow ssh
+ufw allow 'Nginx HTTP'
+echo 'y' | ufw enable
+
+echo 'Hello World!' > /var/www/html/index.html
+
+rule_exists="$(grep -c -e "^\\s*location\\s*/redirect_me\\s*{" /etc/nginx/sites-enabled/default)"
+if [ "$(grep -c -e "^\\s*location\\s*/\\s*{" /etc/nginx/sites-enabled/default)" -eq 0 ]; then
+	echo "$config" > /etc/nginx/sites-available/default
+elif [ "$rule_exists" -eq 0 ]; then
+	sed -z -i -E "s/\s*location\s*\/\s*\{(\s|[^}])*\}/\n\n$create_rule/" /etc/nginx/sites-available/default
 else
-	service nginx restart
+	sed -z -i -E "s/\s*location\s*\/redirect_me\s*\{(\s|[^}])*\}/\n\n$rule/" /etc/nginx/sites-available/default
 fi
+
+service nginx restart
