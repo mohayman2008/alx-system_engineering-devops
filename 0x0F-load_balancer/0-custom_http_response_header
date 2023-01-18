@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Installs and configure Nginx web server
+# shellcheck disable=SC2016
+
+CONF_FILE='/etc/nginx/nginx.conf'
+HTTP_RULE='add_header '\''X-Served-By'\'' "$hostname";'
+
+rule_exists="$(grep -c -e "^\\s*add_header.*X-Served-By[^;]*;" "$CONF_FILE")"
+if [ "$rule_exists" -eq 0 ]; then
+	sed -i -z -E "s/([ \t]*)(http\s*\{[^}]*)\n[ \t]*\}/\1\2\n\n\1\t$HTTP_RULE\n\1}/" "$CONF_FILE"
+else
+	sed -i -E "s/^(\s*)add_header.*X-Served-By[^;]*;\$/\1$HTTP_RULE/" "$CONF_FILE"
+fi
+
+service nginx restart
