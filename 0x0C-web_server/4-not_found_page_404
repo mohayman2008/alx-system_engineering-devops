@@ -3,23 +3,95 @@
 # shellcheck disable=SC2016
 # shellcheck disable=SC1004
 
-config='    location \/redirect_me {\
+CONF_FILE='/etc/nginx/sites-available/default'
+
+config='server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+		root /var/www/html;
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm index.nginx-debian.html;
+	server_name _;
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ =404;
+	}
+
+	error_page 404 /404;
+	location  /404 {
+		internal;
+	}
+
+	location /redirect_me {
+		return 301 https://www.google.com/;
+	}
+}
+'
+
+redirect_rule='	location \/redirect_me {\
 		return 301 https:\/\/www.google.com\/;\
+	}'
+
+error_rule1='	error_page 404 \/404;'
+error_rule2='	location  \/404 {\
+		internal;\
+	}'
+
+create_redirect='	location \/ {\
+		try_files $uri $uri\/ =404;\
 	}\
 \
-	error_page 404 \/404;\
-	location  \/404 {\
-            internal;\
+	location \/redirect_me {\
+		return 301 https:\/\/www.google.com\/;\
+	}'
+
+create_error='	location \/ {\
+		try_files $uri $uri\/ =404;\
 	}\
 \
-	location \/ {'
+	error_page 404 \/404;'
 
 apt-get update
 apt-get -y install nginx
-ufw allow 'Nginx FULL'
+
+ufw allow ssh
+ufw allow 'Nginx HTTP'
+echo 'y' | ufw enable
+
 echo 'Hello World!' > /var/www/html/index.html
 echo 'Ceci n'\''est pas une page' > /var/www/html/404
-if [ "$(grep -c -e "^\\s*location\\s*/404\\s*" /etc/nginx/sites-enabled/default)" -eq 0 ]; then
-	sed -i "s/^\s*location\s*\/\s*{\s*$/$config/" /etc/nginx/sites-enabled/default
+
+# Make /etc/nginx/sites-enabled/default a symlink to "$CONF_FILE"
+rm -f /etc/nginx/sites-enabled/default
+ln -s "$CONF_FILE" /etc/nginx/sites-enabled/default
+
+# Check if the redirection rule exists. Replace it if it exists or add it other wise
+redir_rule_exists="$(grep -c -e "^\\s*location\\s*/redirect_me\\s*{" "$CONF_FILE")"
+if [ "$(grep -c -e "^\\s*location\\s*/\\s*{" /etc/nginx/sites-enabled/default)" -eq 0 ]; then
+	echo "$config" > "$CONF_FILE"
+elif [ "$redir_rule_exists" -eq 0 ]; then
+	sed -z -i -E "s/\s*location\s*\/\s*\{(\s|[^}])*\}/\n\n$create_redirect/" "$CONF_FILE"
+else
+	sed -z -i -E "s/\s*location\s*\/redirect_me\s*\{(\s|[^}])*\}/\n\n$redirect_rule/" "$CONF_FILE"
 fi
+
+# Check if the '/404' rule exists. Replace it if it exists and clear the variable so it's don't get duplicated
+err2_rule_exists="$(grep -c -e "^\\s*location\\s*/404\\s*{" "$CONF_FILE")"
+if [ "$err2_rule_exists" -gt 0 ]; then
+	sed -z -i -E "s/\s*location\s*\/404\s*\{(\s|[^}])*\}/\n$error_rule2/" "$CONF_FILE"
+	error_rule2=''
+else
+	error_rule2='\n'"$error_rule2"
+fi
+
+# Check if the 'error_page' rule exists. Replace it if it exists or add it other wise
+err1_rule_exists="$(grep -c -e "^\\s*error_page.*;" "$CONF_FILE")"
+if [ "$err1_rule_exists" -eq 0 ]; then
+	sed -z -i -E "s/\s*location\s*\/\s*\{(\s|[^}])*\}/\n\n$create_error$error_rule2/" "$CONF_FILE"
+else
+	sed -z -i -E "s/\s*error_page[^;]*;/\n\n$error_rule1$error_rule2/" "$CONF_FILE"
+fi
+
 service nginx restart
