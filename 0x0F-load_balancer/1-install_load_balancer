@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Install and configure HAproxy on A Load Balancer server
+GLOBAL_CONF='/etc/default/haproxy'
+CONF_FILE='/etc/haproxy/haproxy.cfg'
+PUPLIC_IPv4='52.90.14.224'
+PUPLIC_IPv4='*'
+
+WEB_SERVER1_NAME='90504-web-01'
+WEB_SERVER1_IPv4='54.90.15.29'
+
+WEB_SERVER2_NAME='90504-web-02'
+WEB_SERVER2_IPv4='18.207.207.53'
+
+CONFIGURATION="
+frontend http
+	bind $PUPLIC_IPv4:80
+	mode    http
+	option  httplog
+	option http-server-close
+	default_backend backend_web
+
+backend backend_web
+	balance roundrobin
+	server $WEB_SERVER1_NAME $WEB_SERVER1_IPv4:80 check
+	server $WEB_SERVER2_NAME $WEB_SERVER2_IPv4:80 check
+"
+
+apt-get update
+apt-get -y install --no-install-recommends software-properties-common
+add-apt-repository -y ppa:vbernat/haproxy-2.6
+apt-get -y install haproxy
+
+# Check if ENABLED value doesn't exist and add it to the configuration file,
+# + and make sure its value is 1 if it already exists
+if [ "$(grep -c 'ENABLED=' "$GLOBAL_CONF")" -eq 0 ]; then
+	echo 'ENABLED=1' >> "$GLOBAL_CONF"
+else
+	sed -i -E 's/^ENABLED=.*$/ENABLED=1/' "$GLOBAL_CONF"
+fi
+
+# Append the configuration to the configuration file, if it isn't already existed
+if [ "$(grep -c 'backend backend_web' "$CONF_FILE")" -eq 0 ]; then
+	echo "$CONFIGURATION" >> "$CONF_FILE"
+fi
+
+service haproxy restart
