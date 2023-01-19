@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Fix Nginx server issues in the "Ubuntu 14.04 - 271" sandbox
+
+CONF_FILE='/etc/nginx/sites-available/default'
+
+# Make /etc/nginx/sites-enabled/default a symlink to "$CONF_FILE"
+rm -f /etc/nginx/sites-enabled/default
+ln -s "$CONF_FILE" /etc/nginx/sites-enabled/default
+
+# Restart or Start Nginx service
+service nginx restart
