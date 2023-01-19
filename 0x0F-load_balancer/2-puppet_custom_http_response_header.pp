@@ -89,18 +89,28 @@ file { '/etc/nginx/nginx.conf':
 
 # Configure Nginx so that its HTTP response contains a custom header
 $conf_file='/etc/nginx/nginx.conf'
-$http_rule='add_header \'X-Served-By\' "$hostname";'
-$_command="\
-rule_exists=\"\$(grep -c -e \"^\\\\s*add_header.*X-Served-By[^;]*;\" ${conf_file})\"
-if [ \"\$rule_exists\" -eq 0 ]; then\
-	sed -i -z -E \"s/([ \\t]*)(http\\s*\\{[^}]*)\\n[ \\t]*\\}/\\1\\2\\n\\n\\1\\t${http_rule}\\n\\1}/\" ${conf_file}\
-else\
-	sed -i -E \"s/^(\\s*)add_header.*X-Served-By[^;]*;\\$/\\1${http_rule}/\" ${conf_file}\
-fi"
+$http_rule='add_header \'\\\'\'X-Served-By\'\\\'\' \\"\\$hostname\\";'
+$_command="rule_exists=\"\$(grep -c -e \"^\\\\s*add_header.*X-Served-By[^;]*;\" ${conf_file})\";
+if [ \"\$rule_exists\" -eq 0 ]; then
+	sed -i -z -E \"s/([ \\t]*)(http\\s*\\{[^}]*)\\n[ \\t]*\\}/\\1\\2\\n\\n\\1\\t${http_rule}\\n\\1}/\" ${conf_file};
+else
+	sed -i -E \"s/^(\\s*)add_header.*X-Served-By[^;]*;\\$/\\1${http_rule}/\" ${conf_file};
+fi
+"
+
+# $_command="
+# rule_exists=\"\$(grep -c -e \"^\\\\s*add_header.*X-Served-By[^;]*;\" ${conf_file})\"
+# if [ \"\$rule_exists\" -eq 0 ]; then
+# 	sed -i -z -E \"s/([ \\t]*)(http\\s*\\{[^}]*)\\n[ \\t]*\\}/\\1\\2\\n\\n\\1\\t${http_rule}\\n\\1}/\" ${conf_file}
+# else
+# 	sed -i -E \"s/^(\\s*)add_header.*X-Served-By[^;]*;\\$/\\1${http_rule}/\" ${conf_file}
+# fi
+# "
 
 exec { 'X-Served-By header':
   path    => $path,
-  command => "bash -c ${_command}",
+  command => "bash -c '${_command}'",
+  # provider => shell,
   require => File['/etc/nginx/nginx.conf'],
   notify  => Service['nginx']
 }
