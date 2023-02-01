@@ -4,4 +4,4 @@ pkill -f .*apache2.*
 chown nginx:nginx /usr/sbin/nginx /etc/nginx/nginx.conf
 chmod 644 /etc/nginx/nginx.conf
 sed -i -E 's/listen\s*80\s*default_server;/listen 8080 default_server;/' '/etc/nginx/sites-available/default'
-su nginx -c 'service nginx start'
+echo 'service nginx start' | sudo -u nginx -i
