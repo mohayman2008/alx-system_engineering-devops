@@ -15,6 +15,8 @@ GRANT SELECT
   ON `mysql`.`user`
   TO 'holberton_user'@'localhost';
 
+FLUSH PRIVILEGES;
+
 -- Retrieving Binary Log Coordinates
 FLUSH TABLES WITH READ LOCK;
 SHOW MASTER STATUS;
