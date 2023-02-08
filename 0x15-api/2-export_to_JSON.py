@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 '''This script uses {JSON} Placeholder API to return information about
-the tasks of an employee with an identifier <ID>, exported as '<ID>.csv' file
+the tasks of an employee with an identifier <ID>, exported as '<ID>.json' file
 '''
-import csv
+import json
 import requests
 from sys import argv
 
@@ -36,15 +36,13 @@ def main():
         print("Not a valid JSON")
         return None
 
-    with open(id + '.csv', 'w', newline='') as f:
-        fields = ["id", "username", "task_status", "task_title"]
-        writer = csv.DictWriter(f, fieldnames=fields, quoting=csv.QUOTE_ALL)
+    tasks = [{"task": todo.get('title'), "completed": todo.get('completed'),
+              "username": username}
+             for todo in todos]
+    out_dict = {id: tasks}
 
-        row_dict = {'id': id, 'username': username}
-        for todo in todos:
-            row_dict['task_status'] = todo.get('completed')
-            row_dict['task_title'] = todo.get('title')
-            writer.writerow(row_dict)
+    with open(id + '.json', 'w') as f:
+        json.dump(out_dict, f)
 
 
 if __name__ == "__main__":
