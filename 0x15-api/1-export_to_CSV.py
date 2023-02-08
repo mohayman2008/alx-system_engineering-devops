@@ -38,8 +38,7 @@ def main():
 
     with open(id + '.csv', 'w', newline='') as f:
         fields = ["id", "username", "task_status", "task_title"]
-        writer = csv.DictWriter(f, fieldnames=fields,
-                                quoting=csv.QUOTE_NONNUMERIC)
+        writer = csv.DictWriter(f, fieldnames=fields, quoting=csv.QUOTE_ALL)
 
         row_dict = {'id': id, 'username': username}
         for todo in todos:
