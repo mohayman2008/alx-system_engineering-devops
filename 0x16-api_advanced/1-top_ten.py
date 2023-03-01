@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-'''This script queries the Reddit API prints the titles
+'''This script queries the Reddit API and prints the titles
 of the first 10 hot posts listed for a given subreddit'''
 import requests
 
 
 def top_ten(subreddit):
-    '''prints the titles of the first 10 hot posts listed
+    '''Prints the titles of the first 10 hot posts listed
     for a given "subreddit", by querying the Reddit API'''
 
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
@@ -15,8 +15,8 @@ def top_ten(subreddit):
     response = requests.get(url, headers=headers, params=params,
                             allow_redirects=False)
     try:
-        about = response.json()
-        data = about.get('data')
+        result = response.json()
+        data = result.get('data')
         if data is None:
             print(None)
             return
@@ -31,4 +31,5 @@ def top_ten(subreddit):
             else:
                 print(None)
     except ValueError:
-        return 0
+        print(None)
+        return
