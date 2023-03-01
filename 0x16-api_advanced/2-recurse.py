@@ -4,9 +4,12 @@ the titles of all hot articles for a given subreddit'''
 import requests
 
 
-def recurse(subreddit, hot_list=[]):
+def recurse(subreddit, hot_list=None):
     '''Returns a list containing the titles of all hot articles
     for a given "subreddit", by querying the Reddit API'''
+
+    if hot_list is None:
+        hot_list = []
 
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     limit = 100  # Maximum number of posts to be retreived
