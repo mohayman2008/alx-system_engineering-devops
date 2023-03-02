@@ -30,7 +30,7 @@ def count_words(subreddit, word_list, after=None, count=0, titles=None):
     headers = {'user-agent': 'MyApp v.2023'}
     params = {'raw_json': '1', 'limit': str(limit), 'count': str(count)}
     if after is not None:
-        params['after'] = after     
+        params['after'] = after
 
     response = requests.get(url, headers=headers, params=params,
                             allow_redirects=False)
