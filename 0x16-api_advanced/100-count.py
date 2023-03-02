@@ -58,7 +58,8 @@ def count_words(subreddit, word_list, after=None, count=0, titles=None):
             pile = ' '.join(titles)
             for word_raw in word_list:
                 word = word_raw.lower()
-                w_count = len(re.findall(word, pile, re.IGNORECASE))
+                w_count = len(re.findall('[\\s\\n]{}[\\s\\n]'.format(word),
+                                         pile, re.IGNORECASE))
                 if w_count:
                     counts[word] = counts.get(word, 0) + w_count
             sorted_counts = sorted(counts.items(), key=cmp_to_key(cmp_counts))
