@@ -55,7 +55,10 @@ def count_words(subreddit, word_list, after=None, count=0, titles=None):
 
         if not after:
             counts = {}
-            pile = ' '.join(titles)
+            words = []
+            for title in titles:
+                words.extend(title.split())
+            pile = '  '.join(words)
             for word_raw in word_list:
                 word = word_raw.lower()
                 w_count = len(re.findall('[\\s\\n]{}[\\s\\n]'.format(word),
