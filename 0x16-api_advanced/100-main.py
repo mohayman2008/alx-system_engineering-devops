@@ -2,14 +2,11 @@
 """
 100-main
 """
-import sys
+
+def main():
+    count_words = __import__('100-count').count_words
+    result = count_words('hello', ['REDDIT', 'german', 'HI', 'whynot'])
+    print('OK')
 
 if __name__ == '__main__':
-    print('OK')
-    # count_words = __import__('100-count').count_words
-    # if len(sys.argv) < 3:
-    #     print("Usage: {} <subreddit> <list of keywords>".format(sys.argv[0]))
-    #     print("Ex: {} programming 'python java javascript'"
-    #           .format(sys.argv[0]))
-    # else:
-    #     result = count_words(sys.argv[1], [x for x in sys.argv[2].split()])
+    main()
