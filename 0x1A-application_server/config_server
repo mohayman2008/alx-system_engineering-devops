@@ -1,25 +1,29 @@
 #!/usr/bin/env bash
 # This script configures application server using flask, Gunicorn and Nginx
+# shellcheck disable=SC2002,SC2086
 
 # Check if required pkgs exists and install missing packages
-to_install='python3-dev'
-progs=( 'python3' 'pip3' 'nginx' )
+to_install=''
+pkgs=( 'python3' 'python3-dev' 'python3-pip' 'nginx' 'libmysqlclient-dev' 'zlib1g-dev' )
 
-for prog in "${progs[@]}"
+for pkg in "${pkgs[@]}"
 do
-    if ! which "$prog" > /dev/null 2>&1 ; then
-        to_install="$to_install $prog"
+    if ! dpkg -l "$pkg" > /dev/null 2>&1 ; then
+        to_install="$to_install $pkg"
     fi
 done
-echo "Installing the following packages: $to_install"
-echo
 
-sudo apt update
-sudo apt install -y "$to_install"
+if [ -n "$to_install" ] ; then
+    echo "Installing the following packages: $to_install"
+    echo
+
+    sudo apt update
+    sudo apt install -y "$to_install"
+fi
 
 # Check if required pip3 pkgs exists and install missing packages
 to_install=''
-pkgs=( 'gunicorn' 'flask' )
+pkgs=( 'gunicorn' 'flask' 'mysqlclient' 'sqlalchemy' 'flask_cors' )
 
 for pkg in "${pkgs[@]}"
 do
@@ -29,11 +33,15 @@ do
 done
 
 
-if [ -n "$to_install" ] ; then
+if [ -n "$to_install" ] ; then  
     echo "Installing the following pip3 packages:$to_install"
     pip3 install $to_install
 fi
 
+# Setup MySQL
+cat setup_mysql_create_users.sql | sudo mysql
+if [ "$1" == 'master' ] ; then
+    cat setup_mysql_create_databases.sql | sudo mysql
+fi
 
-# Configure the firewall to allow traffic through application servers port
-sudo ufw allow 5000/tcp
+# HBNB_MYSQL_USER="hbnb_dev" HBNB_MYSQL_PWD="hbnb_dev_pwd" HBNB_MYSQL_HOST="localhost" HBNB_MYSQL_DB="hbnb_dev_db" HBNB_TYPE_STORAGE="db"
