@@ -65,9 +65,9 @@ server {
         proxy_pass http://localhost:5001/number_odd_or_even/;
     }
 	
-	location /api/ {
+	location /api/v1/ {
         include proxy_params;
-        proxy_pass http://localhost:5002/api/;
+        proxy_pass http://localhost:5002/api/v1/;
     }
 
 	# pass PHP scripts to FastCGI server
