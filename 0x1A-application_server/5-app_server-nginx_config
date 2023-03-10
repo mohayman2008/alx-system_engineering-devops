@@ -21,6 +21,7 @@
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
+	add_header X-Served-By 90504-web-01;
 
 	# SSL configuration
 	#
@@ -43,7 +44,7 @@ server {
 	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html;
 
-	server_name localhost 54.90.15.29;
+	server_name 54.90.15.29 localhost;
 
 	# location / {
 	# 	# First attempt to serve request as file, then
@@ -61,22 +62,22 @@ server {
 
 	location /airbnb-onepage/ {
         include proxy_params;
-        proxy_pass http://localhost:5000/airbnb-onepage/;
+        proxy_pass http://0.0.0.0:5000/airbnb-onepage/;
     }
 
 	location /airbnb-dynamic/number_odd_or_even/ {
         include proxy_params;
-        proxy_pass http://localhost:5001/number_odd_or_even/;
+        proxy_pass http://0.0.0.0:5001/number_odd_or_even/;
     }
 	
 	location /api/v1/ {
         include proxy_params;
-        proxy_pass http://localhost:5002/api/v1/;
+        proxy_pass http://0.0.0.0:5002/api/v1/;
     }
 
 	location / {
         include proxy_params;
-        proxy_pass http://localhost:5003/2-hbnb/;
+        proxy_pass http://0.0.0.0:5003/2-hbnb/;
     }
 
 	# pass PHP scripts to FastCGI server
