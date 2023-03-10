@@ -3,4 +3,4 @@
 
 # pid="$(sudo systemctl show --property MainPID --value gunicorn)"
 # kill -1 "$pid"
-kill -SIGHUP "$(pgrep gunicorn | head -n1)"
+pkill -SIGHUP gunicorn
