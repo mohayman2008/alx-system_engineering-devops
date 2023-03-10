@@ -2,5 +2,6 @@
 # This script reloads Gunicorn in a graceful way
 
 # pid="$(pgrep gunicorn | head -n1)"
-pid="$(systemctl show --property MainPID --value)"
-kill -1 "$pid"
+# pid="$(sudo systemctl show --property MainPID --value gunicorn)"
+# kill -1 "$pid"
+kill -HUP "$(sudo systemctl show --property MainPID --value gunicorn)"
