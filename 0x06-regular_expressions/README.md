@@ -72,7 +72,7 @@ the problems in the tasks of this project
 * Doesn't match: 
     + "*123456789*"
     + "*12345678900*"
-    + "* 4155049898*"
+    + *" 4155049898"*
     + "*415 504 9898*"
     + "*415-504-9898*"
 
@@ -99,10 +99,14 @@ then print them out in the following format "***[SENDER],[RECEIVER],[FLAGS]***"
 #### **Example**:  
 
 **Input**:  
->"Feb 1 11:00:00 ip-10-0-0-11 mdr: 2016-02-01 11:00:00 Receive SMS [SMSC:SYBASE1] [SVC:] [ACT:]  
-[BINF:] [FID:] [from:Google] [to:+16474951758] [flags:-1:0:-1:0:-1] [msg:127:This planet has - or rather had -  
-a problem, which was this: most of the people on it were unhappy for pretty much of the time.] [udh:0:]"
+```
+Feb 1 11:00:00 ip-10-0-0-11 mdr: 2016-02-01 11:00:00 Receive SMS [SMSC:SYBASE1] [SVC:] [ACT:]
+[BINF:] [FID:] [from:Google] [to:+16474951758] [flags:-1:0:-1:0:-1] [msg:127:This planet has - or rather had -
+a problem, which was this: most of the people on it were unhappy for pretty much of the time.] [udh:0:]
+```
 
 **Output**:  
->Google,+16474951758,-1:0:-1:0:-1
+```
+Google,+16474951758,-1:0:-1:0:-1
+```
 
