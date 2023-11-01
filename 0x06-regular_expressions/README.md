@@ -1,4 +1,4 @@
-# 0x06. Regular expression
+# 0x06. Regular expressions
 
 The files in this folder are ruby scripts that depends on regular expressions (RegEx) to solve  
 the problems in the tasks of this project
