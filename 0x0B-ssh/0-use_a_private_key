@@ -2,7 +2,7 @@
 # This bash script uses ssh to connect to the user ubuntu on my "web-01" server
 # using the private key "~/.ssh/school"
 
-IP='52.91.120.176'
-KEY=~/'.ssh/school'
+# IP='52.91.120.176'
+# KEY=~/'.ssh/school'
 
-ssh ubuntu@"$IP" -i "$KEY"
+ssh ubuntu@52.91.120.176 -i ~/.ssh/school
