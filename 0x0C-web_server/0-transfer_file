@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# This bash script that transfers a local file to a remote server using scp
+# Parameters:
+#   1- The path of the local file
+#   2- The IP of the remote server
+#   3- The username on the remote servers that scp will connect with
+#   4- The path to the SSH private key that scp will use
+
+if [ $# -lt 3 ]; then
+    echo 'Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY'
+    exit 1
+else
+    path="$1"
+    ip="$2"
+    user="$3"
+    if [ $# -gt 3 ]; then
+        key="$4"
+        scp -i "$key" -o StrictHostKeyChecking=no "$path" "$user@$ip:~/"
+    else
+        scp -o StrictHostKeyChecking=no "$path" "$user@$ip:~/"
+    fi
+fi
