@@ -56,6 +56,7 @@ fi
 echo 'Hello World!' > /var/www/html/index.html
 
 sed -Ezi 's/(location\s*\/\s*\{[^\}]*\})/\1\n\n\terror_page 404 \/404;\n\tlocation \/404 {\n\t\tinternal;\n\t}/' "$CONF_PATH"
+echo 'Ceci n'\''est pas une page' > /var/www/html/404
 
 sed -Ezi 's/(location\s*\/\s*\{[^\}]*\})/\1\n\n\tlocation \/redirect_me {\n\t\treturn 301 https:\/\/www.google.com\/;\n\t}/' "$CONF_PATH"
 
