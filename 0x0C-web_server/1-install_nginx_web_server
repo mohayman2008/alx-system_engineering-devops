@@ -32,23 +32,19 @@ config='server {
 
 # Check if there's an nginx default server configurations files
 # 	If it exists make a backup of it
-# 	If not creates a new one with the predefined configuration and exits
+# 	If not creates a new one with the predefined configuration
 if [ -f "$CONF_PATH" ]
 then
     cp "$CONF_PATH" "$CONF_PATH".backup."$(date -u +%Y%m%d-%H%M%S)"
 else
-    echo "$config" > "$CONF_PATH" && exit
-	echo "Error!!"
-    exit 1
+    echo "$config" > "$CONF_PATH"
 fi
 
 
 # Check if there's no server configurations in the default nginx configuration file
 if  [ ! "$(grep -zE 'server\s*\{.*\}' "$CONF_PATH" > /dev/null 2>&1 && echo $?)" ]
 then
-    echo "$config" > "$CONF_PATH" && exit
-	echo "Error!!"
-    exit 1
+    echo "$config" > "$CONF_PATH"
 fi
 
 
