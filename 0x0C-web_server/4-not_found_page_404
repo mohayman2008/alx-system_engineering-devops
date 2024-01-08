@@ -3,11 +3,15 @@
 
 # shellcheck disable=SC2016
 
+# Installing nginx
 apt-get update
 apt-get install -y nginx
 
+# Defining the path to the default configuration file
 CONF_PATH='/etc/nginx/sites-available/default'
 
+
+# Default fall back configuration
 config='server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
@@ -25,20 +29,30 @@ config='server {
 	}
 }'
 
+
+# Check if there's an nginx default server configurations files
+# 	If it exists make a backup of it
+# 	If not creates a new one with the predefined configuration and exits
 if [ -f "$CONF_PATH" ]
 then
     cp "$CONF_PATH" "$CONF_PATH".backup."$(date -u +%Y%m%d-%H%M%S)"
 else
     echo "$config" > "$CONF_PATH" && exit
+	echo "Error!!"
     exit 1
 fi
 
+
+# Check if there's no server configurations in the default nginx configuration file
 if  [ ! "$(grep -zE 'server\s*\{.*\}' "$CONF_PATH" > /dev/null 2>&1 && echo $?)" ]
 then
     echo "$config" > "$CONF_PATH" && exit
+	echo "Error!!"
     exit 1
 fi
 
+
+# Make the nginx listens to port 80 for IPv6 connections
 if [ "$(grep -E 'listen\s*\[::\]:[0-9]*\s*default_server;' "$CONF_PATH" > /dev/null 2>&1 && echo $?)" ]
 then
     sed -Ei 's/(listen\s*\[::\]:)[0-9]*(\s*default_server)/\180\2/' "$CONF_PATH"
@@ -46,6 +60,8 @@ else
     sed -Ei 's/(^server\s*\{\s*)/\1\n\tlisten \[::\]:80 default_server;/' "$CONF_PATH"
 fi
 
+
+# Make the nginx listens to port 80 for IPv4 connections
 if [ "$(grep -E 'listen\s*[0-9]*\s*default_server;' "$CONF_PATH" > /dev/null 2>&1 && echo $?)" ]
 then
     sed -Ei 's/(listen\s*)[0-9]*(\s*default_server)/\180\2/' "$CONF_PATH"
@@ -53,11 +69,36 @@ else
     sed -Ei  's/(^server\s*\{\s*)/\1\n\tlisten 80 default_server;/' "$CONF_PATH"
 fi
 
+
+# Create a dummy Homepage
 echo 'Hello World!' > /var/www/html/index.html
 
-sed -Ezi 's/(location\s*\/\s*\{[^\}]*\})/\1\n\n\terror_page 404 \/404;\n\tlocation \/404 {\n\t\tinternal;\n\t}/' "$CONF_PATH"
+
+# Configuring the location of the 404 "Not Found" page
+if [ "$(grep -E 'error_page\s*404\s*.*;' "$CONF_PATH" > /dev/null 2>&1 && echo $?)" ]; then
+	sed -Ei 's/(error_page\s*404\s*).*;/\1\/404;/' "$CONF_PATH"
+else
+	sed -Ezi 's/(location\s*\/\s*\{[^\}]*\})/\1\n\n\terror_page 404 \/404;/' "$CONF_PATH"
+fi
+
+if [ "$(grep -Ez 'location\s*\/404\s*\{[^\}]*\}' "$CONF_PATH" > /dev/null 2>&1 && echo $?)" ]; then
+	sed -Ezi 's/(location\s*\/404\s*\{)[^\}]*\}/\1\n\t\tinternal;\n\t}/' "$CONF_PATH"
+else
+	sed -Ezi 's/(error_page\s*404\s*\/404;)/\1\n\tlocation \/404 {\n\t\tinternal;\n\t}/' "$CONF_PATH"
+fi
+
+
+# Create a dummy error 404 "Not found" page
 echo 'Ceci n'\''est pas une page' > /var/www/html/404
 
-sed -Ezi 's/(location\s*\/\s*\{[^\}]*\})/\1\n\n\tlocation \/redirect_me {\n\t\treturn 301 https:\/\/www.google.com\/;\n\t}/' "$CONF_PATH"
 
+# Configure the route '/redirect_me' to return error 301 (Moved Permanently)
+if [ "$(grep -Ez 'location\s*\/redirect_me\s*\{[^\}]*\}' "$CONF_PATH" > /dev/null 2>&1 && echo $?)" ]; then
+	sed -Ezi 's/(location\s*\/redirect_me\s*\{)[^\}]*\}/\1\n\t\treturn 301 https:\/\/www.google.com\/;\n\t}/' "$CONF_PATH"
+else
+	sed -Ezi 's/(location\s*\/\s*\{[^\}]*\})/\1\n\n\tlocation \/redirect_me {\n\t\treturn 301 https:\/\/www.google.com\/;\n\t}/' "$CONF_PATH"
+fi
+
+
+# Restart nginx service
 service nginx restart
