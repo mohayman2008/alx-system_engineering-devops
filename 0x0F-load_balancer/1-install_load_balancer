@@ -11,8 +11,21 @@ WEB_SERVER1_IPv4='52.91.120.176'
 WEB_SERVER2_NAME='90504-web-02'
 WEB_SERVER2_IPv4='52.23.245.87'
 
-CONFIGURATION="
-	no option http-use-htx
+HEADERS_CASE_FILE='/etc/haproxy/headers-cases'
+HEADERS_CASE_FILE_MOD='\/etc\/haproxy\/headers-cases'
+HEADERS_CASE_ADJUST='server Server
+date Date
+content-type Content-Type
+content-length Content-Length
+last-modified Last-Modified
+etag ETag
+x-served-by X-Served-By
+accept-ranges Accept-Ranges
+via Via
+connection Connection
+'
+
+CONFIGURATION="option h1-case-adjust-bogus-server
 
 frontend http
 	bind $PUPLIC_IPv4:80
@@ -20,17 +33,19 @@ frontend http
 	option  httplog
 	option http-server-close
 	default_backend backend_web
+	option h1-case-adjust-bogus-client
 
 backend backend_web
 	balance roundrobin
 	server $WEB_SERVER1_NAME $WEB_SERVER1_IPv4:80 check
 	server $WEB_SERVER2_NAME $WEB_SERVER2_IPv4:80 check
+	option h1-case-adjust-bogus-server
 "
 
 apt-get update
 apt-get -y install --no-install-recommends software-properties-common
-add-apt-repository -y ppa:vbernat/haproxy-2.0
-apt-get -y install haproxy=2.0.\*
+add-apt-repository -y ppa:vbernat/haproxy-2.8
+apt-get -y install haproxy=2.8.\*
 
 # Check if ENABLED value doesn't exist and add it to the configuration file,
 # + and make sure its value is 1 if it already exists
@@ -40,9 +55,15 @@ else
 	sed -i -E 's/^ENABLED=.*$/ENABLED=1/' "$GLOBAL_CONF"
 fi
 
+echo "$HEADERS_CASE_ADJUST" > "$HEADERS_CASE_FILE"
+
 # Append the configuration to the configuration file, if it isn't already existed
 if [ "$(grep -c 'backend backend_web' "$CONF_FILE")" -eq 0 ]; then
 	echo "$CONFIGURATION" >> "$CONF_FILE"
+fi
+
+if [ "$(grep -Ec 'h1-case-adjust-file\s*.*' "$CONF_FILE")" -eq 0 ]; then
+	sed -Ei 's/(^defaults)/\th1-case-adjust-file '"$HEADERS_CASE_FILE_MOD"'\n\n\1/' "$CONF_FILE"
 fi
 
 service haproxy restart
