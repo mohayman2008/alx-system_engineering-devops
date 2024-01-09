@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This scripts contains the fixes for the container in this task
+# to activate nginx web server on it that listens to port 80
+
+apt update
+apt install -y nginx
+
+service nginx start
