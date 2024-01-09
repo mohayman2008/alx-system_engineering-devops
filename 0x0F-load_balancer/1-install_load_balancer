@@ -12,6 +12,8 @@ WEB_SERVER2_NAME='90504-web-02'
 WEB_SERVER2_IPv4='52.23.245.87'
 
 CONFIGURATION="
+	no option http-use-htx
+
 frontend http
 	bind $PUPLIC_IPv4:80
 	mode    http
@@ -27,8 +29,8 @@ backend backend_web
 
 apt-get update
 apt-get -y install --no-install-recommends software-properties-common
-add-apt-repository -y ppa:vbernat/haproxy-2.8
-apt-get -y install haproxy=2.8.\*
+add-apt-repository -y ppa:vbernat/haproxy-2.0
+apt-get -y install haproxy=2.0.\*
 
 # Check if ENABLED value doesn't exist and add it to the configuration file,
 # + and make sure its value is 1 if it already exists
