@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# This scripts contains the fixes for the container in this task
-# to activate nginx web server on it that listens to port 80
+# Fix Nginx server issues in the "Ubuntu 14.04 - 271" sandbox
 
-apt update
-apt install -y nginx
+CONF_FILE='/etc/nginx/sites-available/default'
 
-service nginx start
+# Make /etc/nginx/sites-enabled/default a symlink to "$CONF_FILE"
+rm -f /etc/nginx/sites-enabled/default
+ln -s "$CONF_FILE" /etc/nginx/sites-enabled/default
+
+# Restart or Start Nginx service
+service nginx restart
