@@ -27,7 +27,7 @@ def count_words(subreddit, word_list, after=None, count=0, titles=None):
         titles = []
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     limit = 100  # Maximum number of posts to be retreived
-    headers = {'user-agent': 'MyApp v.2023'}
+    headers = {'user-agent': 'MyApp v.2024'}
     params = {'raw_json': '1', 'limit': str(limit), 'count': str(count)}
     if after is not None:
         params['after'] = after

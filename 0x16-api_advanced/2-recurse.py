@@ -13,7 +13,7 @@ def recurse(subreddit, hot_list=None):
 
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     limit = 100  # Maximum number of posts to be retreived
-    headers = {'user-agent': 'MyApp v.2023'}
+    headers = {'user-agent': 'MyApp v.2024'}
     params = {'raw_json': '1', 'limit': str(limit)}
     if len(hot_list):
         params['after'] = hot_list[-1]['name']

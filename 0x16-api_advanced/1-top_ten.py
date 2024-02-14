@@ -10,10 +10,13 @@ def top_ten(subreddit):
 
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     limit = 10  # number of posts to be retreived
-    headers = {'user-agent': 'MyApp v.2023'}
+    headers = {'user-agent': 'MyApp v.2024'}
     params = {'raw_json': '1', 'limit': str(limit)}
     response = requests.get(url, headers=headers, params=params,
                             allow_redirects=False)
+    if response.status_code != 200:
+        print(None)
+        return
     try:
         result = response.json()
         data = result.get('data')
