@@ -8,7 +8,7 @@ def number_of_subscribers(subreddit):
     '''Gets the total number of subscribers for a given "subreddit",
     by querying the Reddit API'''
 
-    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
+    url = 'https://old.reddit.com/r/{}/about.json'.format(subreddit)
     headers = {'user-agent': 'MyApp v.2024'}
     params = {'raw_json': 1}
     response = requests.get(url, headers=headers, params=params,

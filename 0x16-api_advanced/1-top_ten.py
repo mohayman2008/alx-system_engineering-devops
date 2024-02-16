@@ -8,7 +8,7 @@ def top_ten(subreddit):
     '''Prints the titles of the first 10 hot posts listed
     for a given "subreddit", by querying the Reddit API'''
 
-    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
+    url = 'https://old.reddit.com/r/{}/hot.json'.format(subreddit)
     limit = 10  # number of posts to be retreived
     headers = {'user-agent': 'MyApp v.2024'}
     params = {'raw_json': '1', 'limit': str(limit)}
