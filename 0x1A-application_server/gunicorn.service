@@ -1,5 +1,5 @@
 [Unit]
-Description=Gunicorn instance to serve web_dynamic/2-hbnb.py
+Description=Gunicorn instance to serve web_dynamic
 After=network.target
 
 [Service]
