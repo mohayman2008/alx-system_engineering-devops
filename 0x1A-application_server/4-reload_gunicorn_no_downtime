@@ -6,4 +6,6 @@
 
 # sudo pkill -SIGHUP gunicor[n]
 
-sudo kill -1 "$(sudo systemctl show --property MainPID --value gunicorn)" 
+# sudo kill -1 "$(sudo systemctl show --property MainPID --value gunicorn)"
+systemctl status gunicorn |  sed -n 's/.*Main PID: \([0-9]*\).*$/\1/g p' | sudo xargs kill -HUP
+systemctl status gunicorn-api |  sed -n 's/.*Main PID: \([0-9]*\).*$/\1/g p' | sudo xargs kill -HUP
