@@ -1,17 +1,4 @@
 #!/usr/bin/env bash
 # This script reloads Gunicorn in a graceful way
 
-# pid="$(sudo systemctl show --property MainPID --value gunicorn)"
-# kill -1 "$pid"
-
-# sudo pkill -SIGHUP gunicor[n]
-
-# sudo kill -1 "$(sudo systemctl show --property MainPID --value gunicorn)"
-# systemctl status gunicorn |  sed -n 's/.*Main PID: \([0-9]*\).*$/\1/g p' | sudo xargs kill -HUP
-# systemctl status gunicorn-api |  sed -n 's/.*Main PID: \([0-9]*\).*$/\1/g p' | sudo xargs kill -HUP
-
-# sudo service gunicorn reload
-# sudo service gunicorn-api reload
-
-sudo systemctl reload gunicorn
-sudo systemctl reload gunicorn-api
+pkill -SIGHUP gunicorn
