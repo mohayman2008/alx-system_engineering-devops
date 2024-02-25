@@ -10,5 +10,8 @@
 # systemctl status gunicorn |  sed -n 's/.*Main PID: \([0-9]*\).*$/\1/g p' | sudo xargs kill -HUP
 # systemctl status gunicorn-api |  sed -n 's/.*Main PID: \([0-9]*\).*$/\1/g p' | sudo xargs kill -HUP
 
-sudo service gunicorn reload
-sudo service gunicorn-api reload
+# sudo service gunicorn reload
+# sudo service gunicorn-api reload
+
+sudo systemctl reload gunicorn
+sudo systemctl reload gunicorn-api
