@@ -18,5 +18,5 @@
 # sudo systemctl reload gunicorn
 # sudo systemctl reload gunicorn-api
 
-systemctl kill -s HUP gunicorn.service
-# systemctl kill -s HUP gunicorn-api.service
+sudo systemctl kill -s HUP gunicorn.service
+# sudo systemctl kill -s HUP gunicorn-api.service
