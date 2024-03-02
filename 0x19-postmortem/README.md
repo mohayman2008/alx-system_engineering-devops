@@ -18,23 +18,25 @@
 - 07:26 PM - 21/10/2022: Site engineer reported the outage to the headquarters<br>
 - 07:53 PM - 21/10/2022: Emergencies team arrived and started investigating<br>
 - 07:55 PM - 21/10/2022: It was thought that the generator was damaged<br>
-- 07:59 PM - 21/10/2022: Thanks to our site engineer efforts in connecting the dots and investigating the issue before the emergencies team<br>
+- 07:59 PM - 21/10/2022: Thanks to our site engineer efforts in connecting the dots and investigating the issue before the<br>
     &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
-    arrival, the cause of the issue was identified quickly, it was the rain combined with the neigbors bad masonry and<br>
+    emergencies team arrival, the cause of the issue was identified quickly, it was the rain combined<br>
     &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
-    electrical insulation, caused the main circuit breaker responsible for both the building to trip down, which also<br>
+    with the neigbors' bad masonry and electrical insulation, caused the main circuit breaker<br>
     &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
-    prevented the backup generator from starting as a safety precaution (Generator control circuit was programmed not<br>
+    responsible for both the buildings to trip down, which alsoprevented the backup generator from<br>
     &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
-    to start if the main circuit breaker is tripped as a safety precaution)<br>
+    starting as a safety precaution (Generator control circuit was programmed not to start if the<br>
+    &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
+    main circuit breaker is tripped as a safety precaution)<br>
 - 08:00 PM - 21/10/2022: After ruling out generator problems, electrical team was summoned to the site<br>
 - 08:45 PM - 21/10/2022: The electrical team arrived and started investigating the electricity network<br>
 - 08:49 PM - 21/10/2022: They disconnected the generator for the circuit and started it and it was all good<br>
-- 08:49 PM - 21/10/2022: They came up with the decision to connect the machines and devices to the generator through a temporary external<br>
+- 08:49 PM - 21/10/2022: They came up with the decision to connect the machines and devices to the generator through a<br>
     &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
-    electrical network and shunts, so they can fix the main network and cut any connections with the lovely neighbors<br>
+    temporary external electrical network and shunts, so they can fix the main network and cut any<br>
     &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp;
-    electrical system<br>
+    connections with the lovely neighbors electrical system<br>
 - 09:10 PM - 21/10/2022: Installation of the temporary electrical network was done<br>
 - 09:10 PM - 21/10/2022: Starting devices and booting up the machines<br>
 - 09:15 PM - 21/10/2022: Issue fixed and all services are up and working<br>
